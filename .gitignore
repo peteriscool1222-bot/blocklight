@@ -1,0 +1,16 @@
+# build output
+/out/
+
+# Windows build artifacts (staging, downloaded JRE/NSIS, built installer)
+/windows/staging/
+/windows/tools/
+
+# Arch package build artifacts
+/arch/src/
+/arch/pkg/
+/arch/*.pkg.tar.zst
+/arch/*.log
+
+# launcher data / junk — never belongs in the repo
+*.class
+*.log

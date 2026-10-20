@@ -1,0 +1,48 @@
+# Blocklight — Arch Linux package
+# Build:   cd arch && makepkg -f
+# Install: pacman -U blocklight-*.pkg.tar.zst
+#
+# Builds the launcher from the project tree (one directory up) and packages the
+# fat jar (JavaFX + natives included) — runtime needs only a Java 21+ JRE.
+
+pkgname=blocklight
+pkgver=1.0
+pkgrel=1
+pkgdesc="Fast Minecraft launcher with native JavaFX UI: Microsoft + offline auth, Fabric/Forge installs, .mrpack modpacks, per-instance game folders"
+arch=('x86_64')
+license=('GPL-3.0-only')
+depends=('java-runtime>=21')
+makedepends=('java-environment>=21')
+options=('!strip' '!debug')
+# local project: sources live next to this PKGBUILD, no remote tarball
+source=()
+sha256sums=()
+
+_project="$startdir/.."
+
+build() {
+    "$_project/build.sh"
+}
+
+package() {
+    # launcher jar (includes gson, JavaFX linux jars and natives)
+    install -Dm644 "$_project/out/blocklight.jar" \
+        "$pkgdir/opt/blocklight/Blocklight.jar"
+
+    # entry point — same flags as run.sh
+    install -Dm755 /dev/stdin "$pkgdir/usr/bin/blocklight" <<'EOF'
+#!/bin/sh
+exec java --enable-native-access=ALL-UNNAMED -jar /opt/blocklight/Blocklight.jar "$@"
+EOF
+
+    # license
+    install -Dm644 "$_project/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+    # desktop integration
+    install -Dm644 "$_project/arch/blocklight.desktop" \
+        "$pkgdir/usr/share/applications/blocklight.desktop"
+    install -Dm644 "$_project/src/main/resources/icon.png" \
+        "$pkgdir/usr/share/icons/hicolor/128x128/apps/blocklight.png"
+    install -Dm644 "$_project/src/main/resources/icon.png" \
+        "$pkgdir/usr/share/pixmaps/blocklight.png"
+}

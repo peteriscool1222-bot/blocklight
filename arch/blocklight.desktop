@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Blocklight
+GenericName=Minecraft Launcher
+Comment=Fast Minecraft launcher — Microsoft & offline auth, Fabric/Forge, modpacks
+Exec=blocklight
+Icon=blocklight
+Terminal=false
+Categories=Game;
+Keywords=minecraft;launcher;fabric;forge;modpack;
